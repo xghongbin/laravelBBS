@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -26,6 +28,22 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = '/';
+
+
+    public function validateLogin(Request $request)
+    {
+
+        $result = $this->validate($request, [
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+            'geetest_challenge' => 'required|string'
+        ], [
+            'geetest_challenge.required' => config('laravel-geetest.client_fail_alert'),
+            'geetest_challenge.string' => config('laravel-geetest.server_fail_alert')
+        ]);
+
+    }
+
 
     /**
      * Create a new controller instance.

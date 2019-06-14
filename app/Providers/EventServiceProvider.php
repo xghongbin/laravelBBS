@@ -24,6 +24,10 @@ class EventServiceProvider extends ServiceProvider
         \Illuminate\Auth\Events\Verified::class => [
             \App\Listeners\EmailVerified::class,
         ],
+        //  对事件 ResetsPassword 进行监听，监听器是 PasswordRest
+        \Illuminate\Auth\Events\PasswordReset::class => [
+            \App\Listeners\RestPassword::class,
+        ]
     ];
 
     /**

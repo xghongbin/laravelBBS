@@ -18,6 +18,7 @@ class ImageUploadHandler
      * @param $file  上传的文件
      * @param $folder  起分割标明作用：文件夹
      * @param $file_prefix 所保存文件的前缀
+     * @param $max_width 保存文件的最大宽度
      * @return array|bool
      */
     public function save($file, $folder, $file_prefix, $max_width = false)
@@ -57,6 +58,12 @@ class ImageUploadHandler
         ];
     }
 
+
+    /**
+     * 根据所传参数判断是否需要重新裁剪图片大小
+     * @param $file_path
+     * @param $max_width
+     */
     public function reduceSize($file_path, $max_width)
     {
         // 先实例化，传参是文件的磁盘物理路径

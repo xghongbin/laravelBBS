@@ -10,6 +10,12 @@ use App\Models\User;
 class UsersController extends Controller
 {
 
+    public function __construct()
+    {
+        //除了此处指定的动作以外，所有其他动作都必须登录用户才能访问，类似于黑名单的过滤机制
+        $this->middleware('auth', ['except' => ['show']]);
+    }
+
     //  展示个人页面
     public function show(User $user)
     {
@@ -19,6 +25,7 @@ class UsersController extends Controller
     //  编辑个人页面
     public function edit(User $user)
     {
+        $this->authorize('update', $user);
         return view('users.edit', compact('user'));
     }
 
@@ -26,6 +33,7 @@ class UsersController extends Controller
     public function update(UserRequest $request, ImageUploadHandler $uploader, User $user)
     {
 
+        $this->authorize('update', $user);
         $data = $request->all();
 
         if ($request->avatar) {

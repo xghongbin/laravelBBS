@@ -50,4 +50,9 @@ class User extends Authenticatable implements MustVerifyEmailContract
     ];
 
     protected $guarded = ['geetest_challenge', 'geetest_validate', 'geetest_seccode'];
+
+    public function topics()
+    {
+        return $this->hasMany(Topic::class);
+    }
 }

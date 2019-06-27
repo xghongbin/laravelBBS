@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Jobs;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use App\Models\Topic;
+use App\Handlers\SlugTranslateHandler;
+use Illuminate\Support\Facades\DB;
+
+class TranslateSlug implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+
+    protected $topic;
+
+
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct( Topic $topic )
+    {
+        // 队列任务构造器中接收了 Eloquent 模型，将会只序列化模型的 ID
+        $this->topic = $topic;
+    }
+
+    /**
+     * Execute the job.
+     * handle 方法会在队列任务执行时被调用
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        // 请求百度 API 接口进行翻译
+        $slug = app(SlugTranslateHandler::class)->translate($this->topic->title);
+
+        // 修复edit或者编辑的时候会跑到路由后面的问题
+        // @url https://learnku.com/laravel/t/14584/slug-has-bug?#reply76507
+        if (trim($this->topic->slug) === 'edit') {
+            $this->topic->slug = 'edit-slug';
+        }
+
+        // 为了避免模型监控器死循环调用，我们使用 DB 类直接对数据库进行操作
+        DB::table('topics')->where('id', $this->topic->id)->update(['slug' => $slug]);
+    }
+}

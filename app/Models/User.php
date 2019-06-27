@@ -55,4 +55,15 @@ class User extends Authenticatable implements MustVerifyEmailContract
     {
         return $this->hasMany(Topic::class);
     }
+
+    /**
+     * 是否作者本人，用于 app/Policies/TopicPolicy.php的调用
+     * 话题是否本人的判断即可使用
+     * @param $model
+     * @return bool
+     */
+    public function isAuthorOf($model)
+    {
+        return $this->id == $model->user_id;
+    }
 }

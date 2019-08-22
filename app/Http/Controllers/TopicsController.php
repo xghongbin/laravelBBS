@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Link;
 use App\Models\Topic;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -9,6 +10,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TopicRequest;
 use App\Models\Category;
 use App\Handlers\ImageUploadHandler;
+use Illuminate\Support\Facades\Log;
+use App\Models\User;
 
 class TopicsController extends Controller
 {
@@ -18,10 +21,14 @@ class TopicsController extends Controller
         $this->middleware('auth', ['except' => ['index', 'show']]);
     }
 
-	public function index(Request $request, Topic $topic)
+	public function index(Request $request, Topic $topic, User $user, Link $link)
 	{
 		$topics = $topic->withOrder($request->order)->paginate(20);
-		return view('topics.index', compact('topics'));
+
+        $active_users = $user->getActiveUsers();
+        $links = $link->getAllCached();
+
+		return view('topics.index', compact('topics','active_users', 'links'));
 	}
 
     public function show(Request $request, Topic $topic)
@@ -63,7 +70,7 @@ class TopicsController extends Controller
 		$this->authorize('update', $topic);
 		$topic->update($request->all());
 
-		return redirect()->route('topics.show', $topic->id)->with('message', '更新成功！');
+		return redirect()->to($topic->link())->with('success', '更新成功！');
 	}
 
 	//  删除话题
@@ -72,7 +79,7 @@ class TopicsController extends Controller
 		$this->authorize('destroy', $topic);
 		$topic->delete();
 
-		return redirect()->route('topics.index')->with('message', '成功删除！');
+		return redirect()->route('topics.index')->with('success', '成功删除！');
 	}
 
 	//  上传图片
@@ -84,10 +91,12 @@ class TopicsController extends Controller
             'msg'       => '上传失败!',
             'file_path' => ''
         ];
+
         // 判断是否有上传文件，并赋值给 $file
         if ($file = $request->upload_file) {
             // 保存图片到本地
             $result = $uploader->save($request->upload_file, 'topics', Auth::id(), 1024);
+            Log::info('---uploadImage---'.json_encode($result));
             // 图片保存成功的话
             if ($result) {
                 $data['file_path'] = $result['path'];

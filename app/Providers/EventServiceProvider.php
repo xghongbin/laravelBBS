@@ -20,11 +20,11 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        //  对事件 Verified 进行监听，监听器是 EmailVerified
+        //  对邮箱认证事件 Verified 进行监听，监听器是 EmailVerified
         \Illuminate\Auth\Events\Verified::class => [
             \App\Listeners\EmailVerified::class,
         ],
-        //  对事件 ResetsPassword 进行监听，监听器是 PasswordRest
+        //  对事件重置密码 ResetsPassword 进行监听，监听器是 PasswordRest
         \Illuminate\Auth\Events\PasswordReset::class => [
             \App\Listeners\RestPassword::class,
         ]

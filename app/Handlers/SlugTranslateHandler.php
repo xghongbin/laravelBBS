@@ -51,25 +51,25 @@ class SlugTranslateHandler
         /**
         获取结果，如果请求成功，dd($result) 结果如下：
 
-        array:3 [▼
-        "from" => "zh"
-        "to" => "en"
-        "trans_result" => array:1 [▼
-        0 => array:2 [▼
-        "src" => "XSS 安全漏洞"
-        "dst" => "XSS security vulnerability"
+        array:3 [
+            "from" => "zh"
+            "to" => "en"
+            "trans_result" => array:1 [▼
+            0 => array:2 [▼
+                    "src" => "发送测试"
+                    "dst" => "Send Test"
+                    ]
+                ]
         ]
-        ]
-        ]
-
          **/
 
         // 尝试获取获取翻译结果
         if (isset($result['trans_result'][0]['dst'])) {
-            return str_slug($result['trans_result'][0]['dst']);
+            return str_slug($result['trans_result'][0]['dst']).'-slug';
         } else {
             // 如果百度翻译没有结果，使用拼音作为后备计划。
-            return $this->pinyin($text);
+            $res = $this->pinyin($text);
+            return $res.'-slug';
         }
     }
 

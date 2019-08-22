@@ -38,7 +38,7 @@ class VerificationController extends Controller
         $this->middleware('auth');
 
         //  设定了 只有 verify 动作使用 signed 中间件进行认证
-        //  signed 中间件是一种由框架提供的很方便的 URL 签名认证方式
+        //  signed 中间件是一种由框架提供的很方便的 URL 签名认证方式 --- (路由签名)
         $this->middleware('signed')->only('verify');
 
         //  对 verify（验证邮件） 和 resend（重新发送） 动作做了频率限制，

@@ -8,13 +8,20 @@
 
         <div class="col-lg-3 col-md-3 hidden-sm hidden-xs user-info">
             <div class="card ">
-                <img class="card-img-top" src="{{ $user->avatar }}" alt="{{ $user->name }}">
+                @if(strlen($user->avatar) >= 0)
+                    <img class="card-img-top" src="{{ $user->avatar }}" alt="{{ $user->name }}">
+                @else
+                    <img class="card-img-top" src="" alt="默认头像">
+                @endif
                 <div class="card-body">
                     <h5><strong>个人简介</strong></h5>
                     <p>{{ $user->introduction }}</p>
                     <hr>
                     <h5><strong>注册于</strong></h5>
                     <p>{{ $user->created_at->diffForHumans() }}</p>
+                    <hr>
+                    <h5><strong>最后活跃</strong></h5>
+                    <p title="{{  $user->last_actived_at }}">{{ $user->last_actived_at->diffForHumans() }}</p>
                 </div>
             </div>
         </div>
@@ -27,13 +34,25 @@
             <hr>
 
             {{-- 用户发布的内容 --}}
-            <div class="card">
+            <div class="card ">
                 <div class="card-body">
                     <ul class="nav nav-tabs">
-                        <li class="nav-item"><a class="nav-link active bg-transparent" href="#">Ta 的话题</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Ta 的回复</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link bg-transparent {{ active_class(if_query('tab', null)) }}" href="{{ route('users.show', $user->id) }}">
+                                Ta 的话题
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link bg-transparent {{ active_class(if_query('tab', 'replies')) }}" href="{{ route('users.show', [$user->id, 'tab' => 'replies']) }}">
+                                Ta 的回复
+                            </a>
+                        </li>
                     </ul>
-                    @include('users._topics', ['topics' => $user->topics()->recent()->paginate(5)])
+                    @if (if_query('tab', 'replies'))
+                        @include('users._replies', ['replies' => $user->replies()->with('topic')->recent()->paginate(5)])
+                    @else
+                        @include('users._topics', ['topics' => $user->topics()->recent()->paginate(5)])
+                    @endif
                 </div>
             </div>
 

@@ -42,7 +42,6 @@ class TranslateSlug implements ShouldQueue
         $slug = app(SlugTranslateHandler::class)->translate($this->topic->title);
 
         // 修复edit或者编辑的时候会跑到路由后面的问题
-        // @url https://learnku.com/laravel/t/14584/slug-has-bug?#reply76507
         if (trim($this->topic->slug) === 'edit') {
             $this->topic->slug = 'edit-slug';
         }

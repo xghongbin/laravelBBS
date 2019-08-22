@@ -7,9 +7,9 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 class Kernel extends HttpKernel
 {
     /**
-     * The application's global HTTP middleware stack.
+     * The application's global HTTP middleware stack.应用程序的全局HTTP中间件堆栈
      *
-     * These middleware are run during every request to your application.
+     * These middleware are run during every request to your application. 这些中间件在对应用程序的每个请求期间运行
      *
      * @var array
      */
@@ -23,6 +23,7 @@ class Kernel extends HttpKernel
 
     /**
      * The application's route middleware groups.
+     * 应用程序的路由中间件组
      *
      * @var array
      */
@@ -35,7 +36,10 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\EnsureEmailIsVerified::class,      // <<--- 只需添加这一行
+            \App\Http\Middleware\EnsureEmailIsVerified::class,      // <<--- 邮箱认证注册中间件
+
+            // 记录用户最后活跃时间
+            \App\Http\Middleware\RecordLastActivedTime::class,
         ],
 
         'api' => [
@@ -45,6 +49,7 @@ class Kernel extends HttpKernel
     ];
 
     /**
+     * 中间件别名设置，允许你使用别名调用中间件，例如上面的 api 中间件组调用
      * The application's route middleware.
      * 应用程序的路由中间件
      * These middleware may be assigned to groups or used individually.

@@ -16559,7 +16559,8 @@ body {
 /* Topic Index Page */
 
 .topics-index-page .topic-list .nav > li > a,
-categories-show-page .topic-list .nav > li > a {
+.categories-show-page .topic-list .nav > li > a,
+.root-page .topic-list .nav > li > a {
   position: relative;
   display: block;
   padding: 5px 14px;
@@ -16567,28 +16568,33 @@ categories-show-page .topic-list .nav > li > a {
 }
 
 .topics-index-page .topic-list a,
-categories-show-page .topic-list a {
+.categories-show-page .topic-list a,
+.root-page .topic-list a {
   color: #444444;
 }
 
 .topics-index-page .topic-list .meta,
-categories-show-page .topic-list .meta {
+.categories-show-page .topic-list .meta,
+.root-page .topic-list .meta {
   font-size: 0.9em;
   color: #b3b3b3;
 }
 
 .topics-index-page .topic-list .meta a,
-categories-show-page .topic-list .meta a {
+.categories-show-page .topic-list .meta a,
+.root-page .topic-list .meta a {
   color: #b3b3b3;
 }
 
 .topics-index-page .topic-list .badge,
-categories-show-page .topic-list .badge {
+.categories-show-page .topic-list .badge,
+.root-page .topic-list .badge {
   background-color: #d8d8d8;
 }
 
 .topics-index-page .topic-list hr,
-categories-show-page .topic-list hr {
+.categories-show-page .topic-list hr,
+.root-page .topic-list hr {
   margin-top: 12px;
   margin-bottom: 12px;
   border: 0;
@@ -17063,5 +17069,31 @@ categories-show-page .topic-list hr {
 
 #app > div.container {
   margin-bottom: 100px;
+}
+
+/* 回复列表 */
+
+.topic-reply a {
+  color: inherit;
+}
+
+.topic-reply .meta {
+  font-size: 0.9em;
+  color: #b3b3b3;
+}
+
+/* 消息通知 */
+
+.notification-badge .badge {
+  font-size: 12px;
+  margin-top: 14px;
+}
+
+.notification-badge .badge-secondary {
+  background-color: #EBE8E8;
+}
+
+.notification-badge .badge-hint {
+  background-color: #d15b47 !important;
 }
 
